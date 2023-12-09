@@ -1,0 +1,36 @@
+<!-- templates/partial/header.html -->
+
+{% block content %}
+  <header class="AppHeader border-b border-zinc-800">
+    <div class="AppHeader-globalBar js-global-bar">
+      <div class="AppHeader-globalBar-start">
+        <nav class="" role="navigation">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/">Rent a UCAV</a>
+          </div>
+        </nav>
+      </div>
+      <div class="AppHeader-globalBar-end">
+        <div id="navbar" class="block">
+          <ul class="flex items-center gap-4 text-center">
+            {% if request.user.is_authenticated %}
+              <li>
+                <a href="#">{{ request.user.username }}</a>
+              </li>
+              <li>
+                <a href="{% url 'account_logout' %}">Logout</a>
+              </li>
+            {% else %}
+              <li class="px-4 py-2 font-medium text-sm rounded-lg">
+                <a href="{% url 'account_login' %}">Login</a>
+              </li>
+              <li class="px-4 py-2 font-medium text-sm rounded-lg border-2 border-zinc-400">
+                <a href="{% url 'account_signup' %}">Signup</a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block index %}
+
+{% include 'partials/header.html' %}
+<div class="flex">
+    {% include 'sidebar/sidebar.html' %}
+    <div class="flex-grow min-h-screen">
+        <div class="min-h-screen">
+            {% block content %}{% endblock %}
+        </div>
+        <div>
+            {% include 'partials/footer.html' %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock index %}
+
+{% block extra_script %}
+{% endblock %}

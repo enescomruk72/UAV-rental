@@ -1,0 +1,127 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4">
+    <h1 class="text-xl font-bold my-4">UCAV Listesi</h1>
+    <table id="yourTableId" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Marka Adı</th>
+                <th>Model</th>
+                <th>Açıklama</th>
+                <th>Resim</th>
+                <th>Maksimum Kalkış Ağırlığı</th>
+                <th>Maksimum Hız (Mach)</th>
+                <th>Maksimum İrtifa (Feet)</th>
+                <th>Otonom Kalkış ve İniş</th>
+                <th>Kiralama Fiyatı</th>
+                <th>Marka</th>
+                <th>Uçak Kategorisi</th>
+            </tr>
+        </thead>
+    </table>
+    
+</div>
+{% endblock %}
+
+
+
+{% block extra_script %}
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    const csrftoken = getCookie('csrftoken');
+    
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+    $(document).ready(function() {
+        $('#yourTableId').DataTable({
+            "ajax": {
+                "url": "api/sihas/", // API'niz
+                "dataSrc": ""
+            },
+            "columns": [
+                { "data": "id" },
+                { "data": "brand_name" },
+                { "data": "model" },
+                { "data": "description" },
+                { "data": "image", "render": function(data, type, row) {
+                    return data ? `<img src="${data}" alt="image"/>` : 'Resim Yok';
+                }},
+                { "data": "max_takeoff_weight" },
+                { "data": "max_speed_mach" },
+                { "data": "max_altitude_feet" },
+                { "data": "autonomous_takeoff_and_landing", "render": function(data, type, row) {
+                    return data ? 'Evet' : 'Hayır';
+                }},
+                { "data": "unit_rental_price" },
+                { "data": "brand" },
+                { "data": "aircraft_category" }
+            ]
+        });
+    });
+    
+
+
+</script>
+{% comment %} <script>
+    $(document).ready(function() {
+        // Django'nun csrf_token templatetag'ini kullanarak CSRF token'ı alın
+        const csrfToken = '{{ csrf_token }}';
+
+        // Kullanıcı bilgilerini bir nesne içinde toplayın
+
+        // AJAX isteğini oluşturun ve verileri gönderin
+        $.ajax({
+            url: 'http://localhost:8000/api/sihas/',
+            method: 'GET',
+            dataType: 'json',
+            xhrFields: {
+                withCredentials: true
+            },
+            headers: {
+                'X-CSRFToken': csrfToken, // CSRF token'ı başlık olarak ekleyin
+            },
+            success: function(data) {
+                const container = $('#ucavContainer');
+                container.empty();  // Önceki içeriği temizle
+                $.each(data.results, function(index, ucav) {
+                    const ucavElement = `
+                        <div class="bg-white rounded-lg shadow-md p-4">
+                            <h2 class="text-lg font-semibold">${ucav.name}</h2>
+                            <p><strong>Model:</strong> ${ucav.model}</p>
+                            <p><strong>Ağırlık:</strong> ${ucav.weight} kg</p>
+                            <p><strong>Maksimum İrtifa:</strong> ${ucav.max_altitude} m</p>
+                            <p><strong>Maksimum Hız:</strong> ${ucav.max_speed} km/h</p>
+                        </div>
+                    `;
+                    container.append(ucavElement);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('Hata:', status, error);
+            }
+        });
+    });
+</script>
+     {% endcomment %}
+{% endblock %}
