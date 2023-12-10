@@ -1,5 +1,6 @@
 
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from apps.uav_app.api.serializers import UCAVSerializer, RentalSerializer
 from apps.uav_app.models import UCAV, Rental
@@ -9,12 +10,13 @@ from apps.uav_app.models import UCAV, Rental
 class UCAVListCreateAPIView(generics.ListCreateAPIView):
     queryset = UCAV.objects.all()
     serializer_class = UCAVSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
 
 class UCAVDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = UCAV.objects.all()
     serializer_class = UCAVSerializer
-
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     
 class RentalListCreateAPIView(generics.ListCreateAPIView):

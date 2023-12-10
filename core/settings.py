@@ -181,7 +181,7 @@ REST_FRAMEWORK = {
         'rest_framework_datatables.filters.DatatablesFilterBackend'
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework_datatables.pagination.DatatablesPageNumberPagination',
-    'PAGE_SIZE': 2,
+    'PAGE_SIZE': 6,
 }
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

@@ -1,6 +1,6 @@
 
 JAZZMIN_SETTINGS = {
-    "site_title": "your_site_name",
+    "site_title": "",
     "site_header": "your_site_header",
     "site_brand": "your_site_brand",
     "site_icon": "images/favicon.png",

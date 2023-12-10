@@ -77,10 +77,10 @@
       },
       success: function (data) {
         let ucavList = $('.swiper-wrapper');
-
+        console.log(data)
         data.results.forEach(function (ucav) {
           let ucavCard = `
-            <div data-pk="${ucav.id}" class="swiper-slide post">
+            <div data-pk="${ucav.id}" class="swiper-slide post cursor-pointer">
                 <img class="post-img" src="${ucav.image}" alt="recipe" />
                 <div class="post-body">
                   <div class="post-detail">
