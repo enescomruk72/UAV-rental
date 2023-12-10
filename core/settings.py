@@ -1,6 +1,6 @@
 import os
-from datetime import timedelta
 from pathlib import Path
+from .jazzmin import JAZZMIN_SETTINGS, JAZZMIN_UI_TWEAKS
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,6 +25,7 @@ SITE_ID = 1
 # Application definition
 
 DJANGO_APPS = [
+    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -180,5 +181,12 @@ REST_FRAMEWORK = {
         'rest_framework_datatables.filters.DatatablesFilterBackend'
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework_datatables.pagination.DatatablesPageNumberPagination',
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 2,
 }
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+
+
+JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
+JAZZMIN_UI_TWEAKS = JAZZMIN_UI_TWEAKS

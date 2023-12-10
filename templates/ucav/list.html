@@ -2,13 +2,13 @@
 {% load static %}
 
 {% block content %}
+
 <div class="container mx-auto px-4">
   <h1 class="text-xl font-bold my-4">The UCAVs</h1>
   <table id="ucavs" class="display dataTable" style="width:100%">
 
   </table>
 </div>
-
 
 
 {% endblock %}
@@ -36,7 +36,7 @@
           "data": null,
           "render": function (data, type, row) {
             // İşlemler için düğmeleri oluştur
-            return '<button class="btn-rent" data-id="' + data.id + '">Rent</button>'
+            return '<button class="btn-rent  ucav-container !py-1 !px-2 !rounded " data-id="' + data.id + '">Rent</button>'
           },
           "title": "",
           "sortable": false
@@ -52,4 +52,5 @@
 
   });
 </script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.bootstrap4.min.css" integrity="sha512-PT0RvABaDhDQugEbpNMwgYBCnGCiTZMh9yOzUsJHDgl/dMhD9yjHAwoumnUk3JydV3QTcIkNDuN40CJxik5+WQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 {% endblock %}

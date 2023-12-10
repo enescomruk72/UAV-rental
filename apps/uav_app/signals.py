@@ -1,16 +1,11 @@
-# signals.py
-
-from allauth.account.signals import user_logged_in, user_signed_up
+from allauth.account.signals import user_logged_in, user_logged_out
 from django.dispatch import receiver
-from rest_framework.authtoken.models import Token
+from django.contrib import messages
 
 @receiver(user_logged_in)
-def user_logged_in_receiver(request, user, **kwargs):
-    token, _ = Token.objects.get_or_create(user=user)
-    print(f'COOKIES: {token}')
+def on_user_logged_in(request, **kwargs):
+    messages.success(request, 'Başarıyla giriş yaptınız.')
 
-
-@receiver(user_signed_up)
-def user_signed_up_receiver(request, user, **kwargs):
-    token, _ = Token.objects.get_or_create(user=user)
-    print(f'COOKIES: {token}')
+@receiver(user_logged_out)
+def on_user_logged_out(request, **kwargs):
+    messages.success(request, 'Başarıyla çıkış yaptınız.')

@@ -98,3 +98,24 @@ class Rental(models.Model):
         )
         verbose_name = 'Rental'
         verbose_name_plural = 'Rentals'
+
+
+
+
+class ContactMessage(models.Model):
+    subject = models.CharField(max_length=255)
+    message = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='contact_user')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Message from {self.subject} at {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+
+
+    class Meta:
+            ordering = (
+                '-created_at',
+            )
+            verbose_name = 'Message'
+            verbose_name_plural = 'Messages'
+

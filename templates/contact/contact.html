@@ -1,7 +1,79 @@
-<!-- templates/index.html -->
 {% extends "index.html" %}
+{% load static %}
 
 
 {% block content %}
 <h1>CONTACT</h1>
+
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto">
+            <h1 class="text-3xl font-bold mb-4">Contact Us</h1>
+            <p class="mb-6">If you have any questions or feedback, feel free to reach out to us.</p>
+            <form method="post" class="bg-gray-900 p-6 rounded-lg shadow-lg">
+                
+                <div class="mb-4">
+                    <label for="subject" class="block text-sm font-semibold mb-2">Your subject</label>
+                    <input type="text" id="subject" name="subject" class="relative w-full !bg-zinc-700 text-white border border-zinc-600 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 rounded-md shadow-sm px-3 py-2">
+                </div>
+                <div class="mb-4">
+                    <label for="message" class="block text-sm font-semibold mb-2">Your Message</label>
+                    <textarea id="message" name="message" rows="4" class="relative w-full !bg-zinc-700 text-white border border-zinc-600 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 rounded-md shadow-sm px-3 py-2"></textarea>
+                </div>
+                <div class="flex justify-end">
+                    <button id="submit-button" type="submit" class="bg-zinc-600 borde2 border-zinc-200 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-md">Send Message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 {% endblock content %}
+
+
+
+{% block extra_script %}
+  <script>
+    $(document).ready(function () {
+        $('#submit-button').on('click', function (event) {
+          event.preventDefault(); // Sayfanın yeniden yüklenmesini engellemek için formun varsayılan davranışını iptal edin.
+      
+          let subject = $('#subject').val();
+          let message = $('#message').val();
+      
+          $.ajax({
+            url: '/api/contact-message/', 
+            type: 'POST',
+            dataType: 'json',
+            xhrFields: {
+              withCredentials: true
+            },
+            headers: {
+              'X-CSRFToken': "{{csrf_token}}"
+            },
+            data: {
+                'subject': subject,
+                'message': message,
+                'user': '{{request.user.id}}'
+            },
+            success: function (ucav) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Message successfully sended!'
+                  }).then(function () {
+                    window.history.back(); 
+                  });;
+                },
+                error: function (xhr, status, error) {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong! ' + error
+                  });
+                },
+          });
+        });
+      });
+      
+  </script>
+{% endblock %}

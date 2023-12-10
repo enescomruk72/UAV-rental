@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.uav_app.models import Brand, AircraftCategory, UCAV, Rental
+from apps.uav_app.models import Brand, AircraftCategory, UCAV, Rental, ContactMessage
 
 
 
@@ -42,4 +42,12 @@ class RentalSerializer(serializers.ModelSerializer):
     
 
 
+class ContactMessageSerializer(serializers.ModelSerializer):
+    contact_user = serializers.HyperlinkedRelatedField(read_only=True, view_name='rental_user',)
 
+    class Meta:
+        model = ContactMessage
+        fields = '__all__'
+        read_only_fields = ['created_at']
+
+        

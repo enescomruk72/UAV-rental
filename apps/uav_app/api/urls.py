@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 
-from apps.uav_app.api.viewsets import BrandViewSet, AircraftCategoryViewSet
+from apps.uav_app.api.viewsets import BrandViewSet, AircraftCategoryViewSet, ContactMessageViewSet
 from apps.uav_app.api.views import (
     UCAVListCreateAPIView,
     UCAVDetailAPIView,
@@ -13,6 +13,7 @@ from apps.uav_app.api.views import (
 router = DefaultRouter()
 router.register(r'brands', BrandViewSet)
 router.register(r'aircraft-categories', AircraftCategoryViewSet)
+router.register(r'contact-message', ContactMessageViewSet, basename='contact')
 
 urlpatterns = [
     # Brands - AircraftCategory

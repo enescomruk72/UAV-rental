@@ -20,6 +20,7 @@ class UCAVDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 class RentalListCreateAPIView(generics.ListCreateAPIView):
     queryset = Rental.objects.all()
     serializer_class = RentalSerializer
+    filterset_fields = ('ucav__name', 'ucav__model')
 
     def get_queryset(self):
         # Yalnızca istek yapan kullanıcıya ait kiralama kayıtlarını döndür
