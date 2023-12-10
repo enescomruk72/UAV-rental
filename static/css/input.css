@@ -2,3 +2,195 @@
 @tailwind components;
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&display=swap');
+
+
+* {
+    color: rgb(230, 237, 243);
+
+}
+
+.AppHeader {
+    background: rgb(1, 4, 9);
+    box-shadow: rgb(48, 54, 61) 0px -1px 0px 0px inset;
+}
+
+.AppHeader .AppHeader-globalBar {
+    display: flex;
+    padding: 1rem;
+    gap: 0.75rem;
+}
+
+
+.AppHeader .AppHeader-globalBar .AppHeader-globalBar-start {
+    flex: 1 1 auto;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.AppHeader .AppHeader-globalBar .AppHeader-globalBar-end {
+    flex: 0 1 auto;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    max-height: 2rem;
+}
+
+
+
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&family=Roboto:wght@500;700&display=swap");
+
+:root {
+    --clr-text: hsl(0, 0%, 100%);
+}
+
+
+#recipes {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-family: "Quicksand", sans-serif;
+}
+
+.recipe-container {
+    background: rgba(133, 133, 133, 0.2);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    padding: 30px 0;
+    width: 100%
+}
+
+.recipe-container>div>h1 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    text-align: left;
+    color: #a19f9f;
+    margin-bottom: .5rem;
+}
+
+.swiper {
+    width: 90%;
+    height: 100%;
+    margin-bottom: 30px;
+}
+
+.swiper-scrollbar {
+    --swiper-scrollbar-bottom: 0px;
+    --swiper-scrollbar-drag-bg-color: #94abd7;
+    --swiper-scrollbar-size: 5px;
+}
+
+.post {
+    position: relative;
+    max-width: 400px;
+    padding: 1rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--clr-text);
+    background-color: transparent;
+    border-radius: 10px;
+    isolation: isolate;
+}
+
+.post::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 15px;
+    background: rgba(3, 2, 9, 0.2);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    z-index: -1;
+}
+
+.post-img {
+    width: 100%;
+    max-width: 400px;
+    object-fit: cover;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    border-radius: 6px;
+}
+
+.post-body {
+    display: grid;
+    grid-template-columns: 70% 25%;
+    align-items: center;
+    gap: 8px;
+    padding: 15px 0;
+    cursor: default;
+}
+
+.post-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.post-author {
+    width: fit-content;
+    font-size: 0.8rem;
+    font-weight: 600;
+    opacity: 0.6;
+    color: var(--clr-text);
+}
+
+
+/* MEDIA QUERIES */
+
+@media (max-width: 1200px) {
+    .swiper {
+        width: 80%;
+    }
+}
+
+@media (max-width: 900px) {
+    #recipes {
+        padding: 60px 80px;
+    }
+
+    .swiper {
+        width: 50%;
+    }
+}
+
+@media (max-width: 765px) {
+    .swiper {
+        width: 70%;
+    }
+}
+
+@media (max-width: 550px) {
+    #recipes {
+        padding: 40px 40px;
+    }
+
+    .swiper {
+        width: 80%;
+    }
+}
+
+
+
+
+form .error {}
+
+.float-label-input {
+    margin: 32px 0;
+}
+
+.float-label-input:focus-within label,
+.float-label-input input:not(:placeholder-shown)+label {
+    transform: translateY(-1.5rem) scale(0.75);
+    background-color: white;
+}

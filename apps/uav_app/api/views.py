@@ -1,9 +1,5 @@
-from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import ListModelMixin, CreateModelMixin
 
 from rest_framework import generics
-from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
 
 from apps.uav_app.api.serializers import UCAVSerializer, RentalSerializer
 from apps.uav_app.models import UCAV, Rental
@@ -25,9 +21,15 @@ class RentalListCreateAPIView(generics.ListCreateAPIView):
     queryset = Rental.objects.all()
     serializer_class = RentalSerializer
 
+    def get_queryset(self):
+        # Yalnızca istek yapan kullanıcıya ait kiralama kayıtlarını döndür
+        return Rental.objects.filter(user=self.request.user)
+
 
 class RentalDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Rental.objects.all()
     serializer_class = RentalSerializer
 
-    
+    def get_queryset(self):
+        # Yalnızca istek yapan kullanıcıya ait kiralama kayıtlarını döndür
+        return Rental.objects.filter(user=self.request.user)

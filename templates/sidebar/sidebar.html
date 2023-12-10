@@ -1,4 +1,4 @@
-<div class="min-h-screen sticky top-0 w-72 border-r border-zinc-800">
+<section class="min-h-screen sticky top-0 min-w-[18rem] border-r border-zinc-800">
   <!-- Sidebar içeriği -->
   <div class="px-4 py-6">
     <h2 class="font-semibold text-sm mb-4">Profil</h2>
@@ -9,15 +9,18 @@
           <svg xmlns="http://www.w3.org/2000/svg" height="14" width="16" viewBox="0 0 576 512" fill="currentColor">
             <path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z" />
           </svg>
-          <span class="font-regular text-sm group-hover:text-white transition-all">Anasayfa</span>
+          <span class="font-regular text-sm group-hover:text-white transition-all">Home</span>
         </a>
       </li>
       <li>
-        <a href="{% url 'ucav' %}" class="flex items-center space-x-3 text-gray-300 hover:text-white group"><span class="font-regular text-sm group-hover:text-white transition-all">İhalar</span></a>
+        <a href="{% url 'ucav' %}" class="flex items-center space-x-3 text-gray-300 hover:text-white group"><span class="font-regular text-sm group-hover:text-white transition-all">UCAVs</span></a>
       </li>
       <li>
-        <a href="{% url 'contact' %}" class="flex items-center space-x-3 text-gray-300 hover:text-white group"><span class="font-regular text-sm group-hover:text-white transition-all">İletişim</span></a>
+        <a href="{% url 'list_rentals' %}" class="flex items-center space-x-3 text-gray-300 hover:text-white group"><span class="font-regular text-sm group-hover:text-white transition-all">My Rentals</span></a>
+      </li>
+      <li>
+        <a href="{% url 'contact' %}" class="flex items-center space-x-3 text-gray-300 hover:text-white group"><span class="font-regular text-sm group-hover:text-white transition-all">Contact</span></a>
       </li>
     </ul>
   </div>
-</div>
+</section>

@@ -7,10 +7,10 @@ from .models import UCAV, AircraftCategory, Brand, Rental
 @admin.register(UCAV)
 class UCAVAdmin(admin.ModelAdmin):
     autocomplete_fields = ('brand', 'aircraft_category')
-    list_display = ('brand', 'model', 'max_speed_mach', 'max_altitude_feet')
-    list_editable = ('max_speed_mach', 'max_altitude_feet')
+    list_display = ('name', 'brand', 'max_speed_mach', 'max_altitude_feet', 'unit_rental_price')
+    list_editable = ('max_speed_mach', 'max_altitude_feet', 'unit_rental_price')
     list_filter = ('brand', 'aircraft_category')
-    search_fields = ('brand__name', 'model', 'aircraft_category__name')
+    search_fields = ('name', 'brand__name', 'aircraft_category__name')
 
 
 # AircraftCategoryAdmin

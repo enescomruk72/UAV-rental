@@ -10,7 +10,6 @@ class BrandSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class AircraftCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = AircraftCategory
@@ -40,7 +39,7 @@ class RentalSerializer(serializers.ModelSerializer):
         model = Rental
         fields = '__all__'
         read_only_fields = ('duration', 'ucav_name', 'user_username', 'price')  # Süre ve isimler otomatik olacak
-
+    
 
 
 

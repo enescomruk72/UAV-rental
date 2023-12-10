@@ -18,9 +18,9 @@ urlpatterns = [
     # Brands - AircraftCategory
     path('', include(router.urls)),
 
-    path('sihas/', UCAVListCreateAPIView.as_view(), name='ucav-list&create'),
-    path('sihas/<int:pk>/', UCAVDetailAPIView.as_view(), name='ucav-detail'),
+    path('ucavs/', UCAVListCreateAPIView.as_view(), name='ucav-list&create'),
+    path('ucavs/<int:pk>/', UCAVDetailAPIView.as_view(), name='ucav-detail'),
     path('rentals/', RentalListCreateAPIView.as_view(), name='rental-list&create'),
-    path('rentals/<int:pk>', RentalDetailAPIView.as_view(), name='rental-detail'),
+    path('rentals/<int:pk>/', RentalDetailAPIView.as_view(), name='rental-detail'),
    
 ]

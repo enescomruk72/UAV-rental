@@ -1,8 +1,6 @@
 from rest_framework import viewsets
-
 from apps.uav_app.models import Brand, AircraftCategory
 from apps.uav_app.api.serializers import BrandSerializer, AircraftCategorySerializer
-
 
 
 class BrandViewSet(viewsets.ModelViewSet):
