@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
-from django.utils import timezone
+
+from PIL import Image
 from decimal import Decimal
 # Create your models here.
 
@@ -22,13 +22,13 @@ class Brand(models.Model):
 
 class AircraftCategory(models.Model):
     name = models.CharField(max_length=55, unique=True)
-    description = models.TextField(editable=False, blank=True, null=True)
+    description = models.TextField(editable=True, blank=True, null=True)
 
     def __str__(self):
         return f'{self.name}'
 
     class Meta:
-        ordering = ('id',)
+        ordering = ('name', 'id',)
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
 
@@ -37,7 +37,7 @@ class UCAV(models.Model):
     name = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='images/', blank=True, null=True)
+    image = models.ImageField(upload_to="images/ucavs/%Y/%m/", blank=True, null=True)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='ucav_brand')
     aircraft_category = models.ForeignKey(AircraftCategory, on_delete=models.CASCADE, related_name='ucav_category')
     max_takeoff_weight = models.FloatField(blank=True, null=True)  # ton
@@ -46,13 +46,21 @@ class UCAV(models.Model):
     autonomous_takeoff_and_landing = models.BooleanField(default=False)
     unit_rental_price = models.DecimalField(max_digits=10, decimal_places=2, default=1000)
 
+    def save(self, *agrs, **kwargs):
+        super().save(*agrs, **kwargs)
+        if self.image:
+            img = Image.open(self.image.path)
+            if img.height > 600 or img.width > 600:
+                output_size = (600, 600)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
 
 
     def __str__(self) -> str:
         return f'{self.name} | {self.aircraft_category}, {self.model}'
 
     class Meta:
-        ordering = ('id', 'name',)
+        ordering = ('name', 'id',)
         verbose_name = 'UCAV'
         verbose_name_plural = 'UCAVs'
 
@@ -60,10 +68,10 @@ class UCAV(models.Model):
 class Rental(models.Model):
     ucav = models.ForeignKey(UCAV, on_delete=models.CASCADE, related_name='rental_ucav')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='rental_user')
-    start_date = models.DateField(auto_now_add=True)
+    start_date = models.DateField()
     end_date = models.DateField()
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    status = models.BooleanField(default=False)
+    status = models.BooleanField(default=True)
     notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -90,3 +98,24 @@ class Rental(models.Model):
         )
         verbose_name = 'Rental'
         verbose_name_plural = 'Rentals'
+
+
+
+
+class ContactMessage(models.Model):
+    subject = models.CharField(max_length=255)
+    message = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='contact_user')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Message from {self.subject} at {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+
+
+    class Meta:
+            ordering = (
+                '-created_at',
+            )
+            verbose_name = 'Message'
+            verbose_name_plural = 'Messages'
+

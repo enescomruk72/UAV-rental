@@ -1,0 +1,118 @@
+<!-- templates/home/index.html -->
+{% extends 'index.html' %}
+{% load static %}
+
+
+
+{% block content %}
+<h1>HOME</h1>
+<div class="container mx-auto p-4 w-[calc(100svw-18rem)]">
+
+  <section id="ucavs">
+    <div class="ucav-container">
+      <div class="container mx-auto w-[90%]">
+        <h1>The Recent UCAVs</h1>
+      </div>
+      <div class="swiper">
+        <div class="swiper-wrapper">
+
+        </div>
+        <div class="swiper-scrollbar"></div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+{% endblock %}
+
+{% block extra_script %}
+
+<script>
+  function createSwiper() {
+    var swiper = new Swiper(".swiper", {
+      grabCursor: true,
+      mousewheel: {
+        invert: true,
+      },
+      scrollbar: {
+        el: ".swiper-scrollbar",
+        draggable: true,
+      },
+      autoplay: {
+        delay: 1500,
+        disableOnInteraction: false,
+      },
+      slidesPerView: 1,
+      spaceBetween: 10,
+      // Responsive breakpoints
+      breakpoints: {
+        900: {
+          slidesPerView: 2,
+          spaceBetween: 20,
+        },
+        1200: {
+          slidesPerView: 3,
+          spaceBetween: 20,
+        },
+      },
+    });
+    console.log('swiper: ', swiper)
+  }
+
+</script>
+<script>
+  const csrfToken = '{{ csrf_token }}'
+
+  $(document).ready(function () {
+    $.ajax({
+      url: '/api/ucavs/',
+      method: 'GET',
+      dataType: 'json',
+      xhrFields: {
+        withCredentials: true
+      },
+      headers: {
+        'X-CSRFToken': csrfToken // CSRF token'ı başlık olarak ekleyin
+      },
+      success: function (data) {
+        let ucavList = $('.swiper-wrapper');
+        console.log(data)
+        data.results.forEach(function (ucav) {
+          let ucavCard = `
+            <div data-pk="${ucav.id}" class="swiper-slide post cursor-pointer">
+                <img class="post-img" src="${ucav.image}" alt="recipe" />
+                <div class="post-body">
+                  <div class="post-detail">
+                    <h2 class="post-name">${ucav.name}</h2>
+                    <p class="post-author">${ucav.brand_name}</p>
+                  </div>
+                  <div class="post-detail text-right flex flex-col items-end justify-center">
+                    <p class="post-author">${ucav.max_altitude_feet} ft</p>
+                    <p class="post-author">${ucav.max_takeoff_weight} ton</p>
+                    </div>
+            </div>
+            </div>
+          `;
+
+          ucavList.append(ucavCard);
+          $('.swiper-slide').on('click', function () {
+            var pk = $(this).data('pk');
+
+            var redirectUrl = '/ucavs/' + pk + '/';
+            window.location.href = redirectUrl;
+          });
+        });
+        createSwiper()
+      },
+      error: function (xhr, status, error) {
+        console.error('Hata:', status, error)
+      },
+      complete: function () {
+        console.log('Tamamlandı')
+      }
+    })
+  })
+</script>
+
+{% endblock %}

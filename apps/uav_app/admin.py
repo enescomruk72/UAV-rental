@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UCAV, AircraftCategory, Brand, Rental
+from .models import UCAV, AircraftCategory, Brand, Rental, ContactMessage
 
 
 # UCAVAdmin
@@ -7,10 +7,10 @@ from .models import UCAV, AircraftCategory, Brand, Rental
 @admin.register(UCAV)
 class UCAVAdmin(admin.ModelAdmin):
     autocomplete_fields = ('brand', 'aircraft_category')
-    list_display = ('brand', 'model', 'max_speed_mach', 'max_altitude_feet')
-    list_editable = ('max_speed_mach', 'max_altitude_feet')
+    list_display = ('name', 'brand', 'max_speed_mach', 'max_altitude_feet', 'unit_rental_price')
+    list_editable = ('max_speed_mach', 'max_altitude_feet', 'unit_rental_price')
     list_filter = ('brand', 'aircraft_category')
-    search_fields = ('brand__name', 'model', 'aircraft_category__name')
+    search_fields = ('name', 'brand__name', 'aircraft_category__name')
 
 
 # AircraftCategoryAdmin
@@ -33,4 +33,10 @@ class RentalAdmin(admin.ModelAdmin):
     list_editable = ('status',)  # Örnek olarak price ve status düzenlenebilir
     list_filter = ('status', 'start_date', 'end_date')
     search_fields = ('ucav__model', 'user__username')
+
+# RentalAdmin
+@admin.register(ContactMessage)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('subject', 'message', 'user', 'created_at',)
+    search_fields = ('subject', 'message', )
 

@@ -1,0 +1,217 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mx-auto p-4">
+  <h1 class="text-3xl font-semibold mb-4">RENT</h1>
+  <div class="ucav-container">
+    <div class="grid grid-cols-2 gap-4 px-8">
+      <div>
+        <img id="ucavImage" src="" alt="" class="w-full h-auto rounded-lg" />
+      </div>
+      <div>
+        <h2 id="ucavName" class="text-2xl font-semibold text-gray-800"></h2>
+        <p id="ucavBrand" class="text-sm text-gray-500"></p>
+        <div class="mt-4 flex justify-between">
+          <div class="ucav-container !w-auto !px-2 !py-1 !rounded">
+            <span class="text-zinc-400 text-sm">MA (feet)</span>
+            <p id="ucavMaxAltitude" class="text-base font-semibold tracking-widest text-gray-600"></p>
+          </div>
+          <div class="ucav-container !w-auto !px-2 !py-1 !rounded">
+            <span class="text-zinc-400 text-sm">MTW (ton)</span>
+            <p id="ucavMaxTakeoffWeight" class="text-base font-semibold tracking-widest text-gray-600"></p>
+          </div>
+          <div class="ucav-container !w-auto !px-2 !py-1 !rounded">
+            <span class="text-zinc-400 text-sm">MS (mach)</span>
+            <p id="ucavMaxSpeedMach" class="text-base font-semibold tracking-widest text-gray-600"></p>
+          </div>
+        </div>
+        <div class="ucav-container !w-auto !px-2 !py-1 !rounded mt-4">
+          <span class="">Price</span>
+          <p id="ucavUnitRentalPrice" class="text-base font-semibold tracking-widest text-gray-600"></p>
+        </div>
+        <div class="ucav-container !w-auto !px-2 !py-1 !rounded mt-4">
+          <p id="ucavAutonomousTakeoffLanding" class="text-base font-semibold tracking-widest text-gray-600"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container mx-auto px-4">
+  <div class="ucav-container">
+    <div class="p-4">
+      <h1 class="text-2xl font-bold mb-4">Rental Form</h1>
+      <form id="create-rent" method="post" class="w-1/2">
+        {% csrf_token %}
+        <div class="mb-0">
+          <label
+            class="block text-gray-400 pointer-events-none transition duration-200 ease-in-outbg-white px-2 text-grey-darker"
+            for="id_rent_date">
+            Start date - Return date
+          </label>
+          <input
+            class="relative w-full !bg-zinc-700 text-white border border-zinc-600 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 rounded-md shadow-sm px-3 py-2"
+            required placeholder="Pick date rage" id="id_rent_date" />
+        </div>
+        {% for field in form %}
+        <div class="mb-4">
+          <label
+            class="block text-gray-400 pointer-events-none transition duration-200 ease-in-outbg-white px-2 text-grey-darker"
+            for="{{ field.id_for_label }}">
+            {{ field.label }}
+          </label>
+          {{ field }}
+          {% if field.help_text %}
+          <p class="text-sm text-gray-600">{{ field.help_text }}</p>
+          {% endif %}
+          {% for error in field.errors %}
+          <p class="text-red-500 text-xs italic">{{ error }}</p>
+          {% endfor %}
+        </div>
+        {% endfor %}
+        <div class=" flex gap-4 item justify-between">
+          <p
+            class="ucav-container !w-auto min-h-full flex-grow  !px-2 !py-1 !rounded  !border-[#238636] !bg-[#238636]/20 text-green-400 font-semibold">
+            Total Price: <span id="totalPrice" class=""></span> <b>₺</b></p>
+          <button type="submit"
+            class="min-h-full flex items-center bg-[#238636] hover:bg-[#2da042] text-white py-0.5 px-2 rounded-lg font-semibold transition duration-300 ease-in-out transform"><span
+              class="text-sm">Rent</span></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+<script>
+  $(document).ready(function () {
+    let ucavId = '{{pk}}'
+    let today = new Date();
+    let tomorrow = new Date();
+    let price;
+
+
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    $("#id_rent_date").daterangepicker({
+      minDate: today,
+      startDate: today,
+      endDate: tomorrow,
+      locale: {
+        format: 'YYYY-MM-DD'
+      }
+    }, function (start, end, label) {
+      var diffDays = end.diff(start, 'days') + 1; // moment.js'in diff fonksiyonu ile gün farkını hesapla
+      var totalPrice = diffDays * price;
+      $('#totalPrice').text(totalPrice.toFixed(2)); // Fiyatı HTML elemanına yaz
+    });
+
+
+    $.ajax({
+      url: '/api/ucavs/' + ucavId + '/',
+      dataType: 'json',
+      xhrFields: {
+        withCredentials: true
+      },
+      success: function (ucav) {
+
+        // Verileri sayfaya doldurma
+        $('#ucavImage').attr('src', ucav.image)
+        $('#ucavName').text(ucav.name)
+        $('#ucavModel').text(ucav.model)
+        $('#ucavDescription').text(ucav.description)
+        $('#ucavMaxTakeoffWeight').text(ucav.max_takeoff_weight)
+        $('#ucavMaxSpeedMach').text(ucav.max_speed_mach)
+        $('#ucavMaxAltitude').text(ucav.max_altitude_feet)
+        $('#ucavAutonomousTakeoffLanding').text('Autonomous Takeoff-Landing: ' + (ucav.autonomous_takeoff_and_landing ? 'Yes' : 'No'))
+        $('#ucavUnitRentalPrice').text(`Unit Rental Price: ${ucav.unit_rental_price} ₺`)
+        $('#totalPrice').text(ucav.unit_rental_price);
+        price = ucav.unit_rental_price
+
+      },
+      error: function (xhr, status, error) {
+        console.error('Hata:', status, error)
+      },
+      complete: function () {
+        console.log('Tamamlandı')
+      }
+    })
+
+    // Tarih inputlarını ve fiyat gösterilecek alanı seç
+    var startDateInput = $('input[name="start_date"]');
+    var endDateInput = $('input[name="end_date"]');
+    var priceDisplay = $('#totalPrice');
+    var unitRentalPrice = $('#totalPrice');
+
+    // Tarih inputlarındaki değişiklikleri dinle
+    startDateInput.add(endDateInput).change(function () {
+      var startDate = new Date(startDateInput.val());
+      var endDate = new Date(endDateInput.val());
+      if (startDate && endDate && startDate <= endDate) {
+        var dayDifference = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1; // +1, başlangıç gününü de dahil etmek için
+        var totalPrice = (dayDifference * unitRentalPrice).toFixed(2); // Toplam fiyatı hesapla ve iki ondalık basamağa yuvarla
+        priceDisplay.text(`${totalPrice} ₺`); // Fiyatı güncelle
+      } else {
+        priceDisplay.text(`${totalPrice} ₺`); // Fiyatı güncelle
+      }
+    });
+
+  })
+
+</script>
+<script>
+  $(document).ready(function () {
+    $('#create-rent').submit(function (e) {
+      e.preventDefault(); // Formun normal gönderimini engelle
+  
+      // Form alanlarından verileri topla
+      var startDate = $('#id_rent_date').data('daterangepicker').startDate.format('YYYY-MM-DD');
+      var endDate = $('#id_rent_date').data('daterangepicker').endDate.format('YYYY-MM-DD');
+      var ucav = "{{pk}}";
+      var user = "{{request.user.id}}";
+      var notes = $('#id_notes').val();
+  
+      // AJAX ile verileri gönder
+      $.ajax({
+        url: '/api/rentals/',
+        type: 'POST',
+        dataType: 'json',
+        xhrFields: {
+          withCredentials: true
+        },
+        headers: {
+          'X-CSRFToken': "{{csrf_token}}"
+        },
+        data: {
+          start_date: startDate,
+          end_date: endDate,
+          ucav: ucav,
+          user: user,
+          notes: notes
+        },
+        success: function (response) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Rental successfully created!'
+          }).then(function () {
+            window.location = '/rentals/'
+          });
+        },
+        error: function (xhr, status, error) {
+          // Hata durumunda eylemler
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! ' + error
+          });
+        }
+      });
+    });
+  });
+  
+
+</script>
+{% endblock %}

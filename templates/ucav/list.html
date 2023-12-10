@@ -1,0 +1,56 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container mx-auto px-4">
+  <h1 class="text-xl font-bold my-4">The UCAVs</h1>
+  <table id="ucavs" class="display dataTable" style="width:100%">
+
+  </table>
+</div>
+
+
+{% endblock %}
+
+{% block extra_script %}
+<script>
+  $(document).ready(function () {
+    var table = $('#ucavs').DataTable({
+      "serverSide": true,
+      search: {
+        return: true
+      },
+      "ajax": "/api/ucavs/?format=datatables",
+      "columns": [
+        { "data": "id", "title": "ID" },
+        { "data": "brand_name", "sortable": false, "title": "Brand" },
+        { "data": "model", "title": "Model" },
+        { "data": "max_takeoff_weight", "title": "Max takeoff weight" },
+        { "data": "max_speed_mach", "title": "Max Speed (Mach)" },
+        { "data": "max_altitude_feet", "title": "Max Altitude (Feet)" },
+        { "data": "autonomous_takeoff_and_landing", "title": "Autonomous Takeoff-Landing" },
+        { "data": "unit_rental_price", "title": "Unit Price (day)" },
+        {
+          // Yeni sütun: İşlemler
+          "data": null,
+          "render": function (data, type, row) {
+            // İşlemler için düğmeleri oluştur
+            return '<button class="btn-rent  ucav-container !py-1 !px-2 !rounded " data-id="' + data.id + '">Rent</button>'
+          },
+          "title": "",
+          "sortable": false
+        }
+      ]
+    });
+
+    // Tablodaki düzenleme düğmesine tıklama işlemi
+    $('#ucavs tbody').on('click', '.btn-rent', function () {
+      var data = table.row($(this).parents('tr')).data();
+      window.location.href = `/ucavs/${data.id}/rent/`
+    });
+
+  });
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.bootstrap4.min.css" integrity="sha512-PT0RvABaDhDQugEbpNMwgYBCnGCiTZMh9yOzUsJHDgl/dMhD9yjHAwoumnUk3JydV3QTcIkNDuN40CJxik5+WQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endblock %}
